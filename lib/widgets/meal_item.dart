@@ -11,6 +11,7 @@ class MealItem extends StatelessWidget {
     @required this.complexity,
     @required this.affordability,
     @required this.id,
+    @required this.removeItem,
   }) : super(key: key);
 
   final Affordability affordability;
@@ -19,7 +20,7 @@ class MealItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String id;
-
+  final Function removeItem;
   String get complexityText {
     switch (complexity) {
       case Complexity.Simple:
@@ -51,10 +52,17 @@ class MealItem extends StatelessWidget {
   }
 
   void selectMeal(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(
+    Navigator.of(ctx)
+        .pushNamed(
       MealDetailScreen.routeName,
       arguments: id,
-    );
+    )
+        // !then will only be run after the page is pop
+        .then((result) {
+      if (result != null) {
+        removeItem(result);
+      }
+    });
   }
 
   @override
